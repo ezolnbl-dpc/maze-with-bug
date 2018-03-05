@@ -5,6 +5,7 @@ import static com.topdesk.cases.toprob.Instruction.NORTH;
 import static com.topdesk.cases.toprob.Instruction.PAUSE;
 import static com.topdesk.cases.toprob.Instruction.SOUTH;
 import static com.topdesk.cases.toprob.Instruction.WEST;
+import static java.lang.Integer.valueOf;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
@@ -187,7 +188,7 @@ public class YourSolution implements Solution {
 				mainList.add(asList(adjecant.get(0), adjecant.get(1), adjecant.get(2)));
 			}
 		}
-
+		
 		int[][] bfsCoordinates = new int[mainList.size()][3];
 		for (int i = 0; i < mainList.size(); i++) {
 			bfsCoordinates[i][0] = mainList.get(i).get(0);
@@ -234,6 +235,12 @@ public class YourSolution implements Solution {
 		return adjecants;
 	}
 
+	private int[] getNextMove(String[][] mappedGrid, int[] from) {
+		return getAdjecants(mappedGrid, asList(from[0], from[1], from[2])).stream()
+				.filter(node -> node.get(2) <= from[2]).findFirst()
+				.map(nextMove -> new int[] { nextMove.get(0), nextMove.get(1), nextMove.get(2) }).get();
+	}
+
 	private List<List<Integer>> getAdjecants(String[][] gridMatrix, List<Integer> actualPoint) {
 		List<List<Integer>> adjecants = new ArrayList<>();
 		int x = actualPoint.get(0);
@@ -243,7 +250,7 @@ public class YourSolution implements Solution {
 		if (y >= 1) {
 			if (gridMatrix[x][y - 1] != hole) {
 				try {
-					adjecants.add(asList(x, y - 1, Integer.valueOf(gridMatrix[x][y - 1])));
+					adjecants.add(asList(x, y - 1, valueOf(gridMatrix[x][y - 1])));
 				} catch (Exception e) {
 				}
 			}
@@ -252,7 +259,7 @@ public class YourSolution implements Solution {
 		if (x >= 1) {
 			if (gridMatrix[x - 1][y] != hole) {
 				try {
-					adjecants.add(asList(x - 1, y, Integer.valueOf(gridMatrix[x - 1][y])));
+					adjecants.add(asList(x - 1, y, valueOf(gridMatrix[x - 1][y])));
 				} catch (Exception e) {
 				}
 			}
@@ -261,7 +268,7 @@ public class YourSolution implements Solution {
 		if (y <= ySize - 2) {
 			if (gridMatrix[x][y + 1] != hole) {
 				try {
-					adjecants.add(asList(x, y + 1, Integer.valueOf(gridMatrix[x][y + 1])));
+					adjecants.add(asList(x, y + 1, valueOf(gridMatrix[x][y + 1])));
 				} catch (Exception e) {
 				}
 			}
@@ -270,7 +277,7 @@ public class YourSolution implements Solution {
 		if (x <= xSize - 2) {
 			if (gridMatrix[x + 1][y] != hole) {
 				try {
-					adjecants.add(asList(x + 1, y, Integer.valueOf(gridMatrix[x + 1][y])));
+					adjecants.add(asList(x + 1, y, valueOf(gridMatrix[x + 1][y])));
 				} catch (Exception e) {
 				}
 			}
@@ -278,35 +285,23 @@ public class YourSolution implements Solution {
 		return adjecants;
 	}
 
-	private int[] getNextMove(String[][] mappedGrid, int[] position) {
-		List<List<Integer>> adjecants = getAdjecants(mappedGrid, asList(position[0], position[1], position[2]));
-		return adjecants.stream().filter(node -> node.get(2) <= position[2]).findFirst()
-				.map(nextMove -> new int[] { nextMove.get(0), nextMove.get(1), nextMove.get(2) }).get();
-	}
-
 	private String[][] createGridMatrix(Grid grid) {
-		System.out.println("---Creating grid matrix---");
+		System.out.println("Creating grid matrix...");
 		String[][] gridMatrix = new String[grid.getHeight()][grid.getWidth()];
-		System.out.println("Maze size: " + grid.getHeight() + " - " + grid.getWidth());
 		gridMatrix[grid.getRoom().getY()][grid.getRoom().getX()] = room;
-		System.out.println("Added room to: " + grid.getRoom().getY() + " - " + grid.getRoom().getX());
 		gridMatrix[grid.getKitchen().getY()][grid.getKitchen().getX()] = kitchen;
-		System.out.println("Added kitchen to: " + grid.getKitchen().getY() + " - " + grid.getKitchen().getX());
 		for (Coordinate holeC : grid.getHoles()) {
 			gridMatrix[holeC.getY()][holeC.getX()] = hole;
-			System.out.println("Added hole to: " + holeC.getY() + " - " + holeC.getX());
 		}
 
 		for (int i = 0; i < grid.getHeight(); i++) {
 			for (int j = 0; j < grid.getWidth(); j++) {
 				if (gridMatrix[i][j] == null) {
 					gridMatrix[i][j] = clearStep;
-					System.out.println("Added clear step to " + i + "," + j);
 				}
 			}
 		}
 
-		System.out.println("---Grid matrix created---");
 		return gridMatrix;
 	}
 }
