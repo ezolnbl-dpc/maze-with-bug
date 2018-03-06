@@ -71,31 +71,3 @@ PAUSE, WEST, NORTH, WEST
 
 The total journey in this example was 11 seconds. Keep in mind that it can be
 more difficult if the bug happens to interfere with Rob's journey.
-
-== Important Notes ==
-
-Some things to keep in mind when implementing your solution:
-
-* Read the JavaDoc carefully before you start. It provides useful information.
-
-* We are only interested in an implementation for the Solution interface. We 
-  do not expect any kind of GUI, nor do we expect a class with a main method.
-  
-* We are not so much looking for a solution that performs very fast. If your 
-  implementation finds the best solution within one minute, that is good 
-  enough.
- 
-* We are interested in the readability of your code.
-
-* Follow the instructions carefully, but keep it simple! Your solution might of
-  course require more files (Java types), be careful however not to 
-  over-engineer your solution.
-  
-* The class that implements the Solution interface should offer a void (no
-  arguments) constructor.
- 
-* You are not allowed to change existing code, i.e. do not change existing 
-  files.
-
-* You can use the existing class YourSolution to implement your code. This
-  class can be changed and is the only exception to the rule above.
